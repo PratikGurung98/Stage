@@ -1,0 +1,616 @@
+[
+    {
+        "id": "e9021b072b10a8bf",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d5ad8fc9.bea14",
+        "type": "comment",
+        "z": "e9021b072b10a8bf",
+        "name": "MSSQL Sample",
+        "info": "\nhttps://docs.microsoft.com/ko-kr/sql",
+        "x": 200,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a0f06a3d.e63928",
+        "type": "inject",
+        "z": "e9021b072b10a8bf",
+        "name": "INSERT",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "a8a09c6a.bf5a"
+            ]
+        ]
+    },
+    {
+        "id": "a8a09c6a.bf5a",
+        "type": "function",
+        "z": "e9021b072b10a8bf",
+        "name": "INSERT",
+        "func": "\nvar u1 = 30;\ntopic = \"INSERT INTO metingen (stroom, vermogen, verbruik) VALUES (\"+u1+\", 40, 50)\";\nmsg.topic = topic;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 2,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 180,
+        "wires": [
+            [
+                "6ae1e60.fdda818"
+            ]
+        ]
+    },
+    {
+        "id": "9e0cdd2d.1a521",
+        "type": "debug",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 690,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6ae1e60.fdda818",
+        "type": "MSSQL",
+        "z": "e9021b072b10a8bf",
+        "mssqlCN": "28a046f74b87ae91",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": 0,
+        "throwErrors": 1,
+        "query": "SELECT TOP 5 * \nFROM test.dbo.[MyTable]",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "topic",
+        "queryOptType": "msg",
+        "paramsOpt": "",
+        "paramsOptType": "none",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [
+            {
+                "output": false,
+                "name": "param1",
+                "type": "int",
+                "valueType": "num",
+                "value": "0",
+                "options": {
+                    "nullable": true,
+                    "primary": false,
+                    "identity": false,
+                    "readOnly": false
+                }
+            },
+            {
+                "output": false,
+                "name": "param2",
+                "type": "int",
+                "valueType": "num",
+                "value": "0",
+                "options": {
+                    "nullable": true,
+                    "primary": false,
+                    "identity": false,
+                    "readOnly": false
+                }
+            }
+        ],
+        "x": 520,
+        "y": 180,
+        "wires": [
+            [
+                "9e0cdd2d.1a521"
+            ]
+        ]
+    },
+    {
+        "id": "73da69f0f7595d7a",
+        "type": "mqtt in",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "topic": "democase",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "4e274f8f0d57f03f",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 380,
+        "wires": [
+            [
+                "d183ac034ec28599",
+                "b450a0374cad624f"
+            ]
+        ]
+    },
+    {
+        "id": "d183ac034ec28599",
+        "type": "function",
+        "z": "e9021b072b10a8bf",
+        "name": "Verdeel de payload",
+        "func": "var incomingData = msg.payload[0];\n\nvar stroomData = { Stroom: incomingData.Stroom };\nvar verbruikData = { Verbruik: incomingData.Verbruik };\nvar vermogenData = { Vermogen: incomingData.Vermogen };\n\nmsg.payload = [stroomData, verbruikData, vermogenData];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "8651be4ef444cc60",
+                "59906291f6e14fc3",
+                "ee4dc4c5711a260c"
+            ]
+        ]
+    },
+    {
+        "id": "8651be4ef444cc60",
+        "type": "function",
+        "z": "e9021b072b10a8bf",
+        "name": "Stroom",
+        "func": "var stroomWaarde = msg.payload[0].Stroom;\nmsg.payload = stroomWaarde;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 380,
+        "wires": [
+            [
+                "8e817cf099b66d2f",
+                "be107dc9f6b907df"
+            ]
+        ]
+    },
+    {
+        "id": "59906291f6e14fc3",
+        "type": "function",
+        "z": "e9021b072b10a8bf",
+        "name": "verbruik",
+        "func": "var verbruikWaarde = msg.payload[1].Verbruik;\nmsg.payload = verbruikWaarde;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 460,
+        "wires": [
+            [
+                "45794f9a1788a5b5",
+                "844441afe7971deb"
+            ]
+        ]
+    },
+    {
+        "id": "ee4dc4c5711a260c",
+        "type": "function",
+        "z": "e9021b072b10a8bf",
+        "name": "function 6",
+        "func": "var vermogenWaarde = msg.payload[2].Vermogen;\nmsg.payload = vermogenWaarde;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 520,
+        "wires": [
+            [
+                "fd0b8cea44c3732d",
+                "902cd503bbdb10c7"
+            ]
+        ]
+    },
+    {
+        "id": "8e817cf099b66d2f",
+        "type": "ui_chart",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "group": "27844f2304b1f311",
+        "order": 8,
+        "width": 10,
+        "height": 7,
+        "label": "broker Stroom",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "0.5",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 778.2000122070312,
+        "y": 341.1999816894531,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45794f9a1788a5b5",
+        "type": "ui_chart",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "group": "27844f2304b1f311",
+        "order": 10,
+        "width": 10,
+        "height": 7,
+        "label": "broker Verbruik",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "3",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 800,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "902cd503bbdb10c7",
+        "type": "ui_chart",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "group": "27844f2304b1f311",
+        "order": 9,
+        "width": 10,
+        "height": 7,
+        "label": "broker Vermogen",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 810,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "844441afe7971deb",
+        "type": "debug",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 810,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "be107dc9f6b907df",
+        "type": "debug",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 770,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "fd0b8cea44c3732d",
+        "type": "debug",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 790,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "b450a0374cad624f",
+        "type": "ui_table",
+        "z": "e9021b072b10a8bf",
+        "group": "27844f2304b1f311",
+        "name": "Gegevens Tabel",
+        "order": 5,
+        "width": 10,
+        "height": 1,
+        "columns": [
+            {
+                "field": "Stroom",
+                "title": "Stroom (A)",
+                "width": "120",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Vermogen",
+                "title": "Vermogen (W)",
+                "width": "160",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Verbruik",
+                "title": "Energie Verbruik (kWh)",
+                "width": "240",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 500,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "a5777216798888e8",
+        "type": "ui_button",
+        "z": "e9021b072b10a8bf",
+        "name": "",
+        "group": "27844f2304b1f311",
+        "order": 2,
+        "width": 8,
+        "height": 1,
+        "passthru": false,
+        "label": "Clear",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "8e817cf099b66d2f",
+                "45794f9a1788a5b5",
+                "902cd503bbdb10c7"
+            ]
+        ]
+    },
+    {
+        "id": "39c6bd52d9a7295a",
+        "type": "ui_spacer",
+        "z": "e9021b072b10a8bf",
+        "name": "spacer",
+        "group": "27844f2304b1f311",
+        "order": 1,
+        "width": 11,
+        "height": 1
+    },
+    {
+        "id": "4f3d5015a85c545e",
+        "type": "ui_spacer",
+        "z": "e9021b072b10a8bf",
+        "name": "spacer",
+        "group": "27844f2304b1f311",
+        "order": 3,
+        "width": 11,
+        "height": 1
+    },
+    {
+        "id": "6116d3231a549586",
+        "type": "ui_spacer",
+        "z": "e9021b072b10a8bf",
+        "name": "spacer",
+        "group": "27844f2304b1f311",
+        "order": 4,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "3523f12116285a9d",
+        "type": "ui_spacer",
+        "z": "e9021b072b10a8bf",
+        "name": "spacer",
+        "group": "27844f2304b1f311",
+        "order": 6,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "fd303b4526f285e8",
+        "type": "ui_spacer",
+        "z": "e9021b072b10a8bf",
+        "name": "spacer",
+        "group": "27844f2304b1f311",
+        "order": 7,
+        "width": 30,
+        "height": 1
+    },
+    {
+        "id": "28a046f74b87ae91",
+        "type": "MSSQL-CN",
+        "tdsVersion": "7_4",
+        "name": "Democase",
+        "server": "192.168.20.46",
+        "port": "1433",
+        "encyption": true,
+        "trustServerCertificate": true,
+        "database": "vlegel",
+        "useUTC": true,
+        "connectTimeout": "15000",
+        "requestTimeout": "15000",
+        "cancelTimeout": "5000",
+        "pool": "5",
+        "parseJSON": false,
+        "enableArithAbort": true,
+        "readOnlyIntent": false
+    },
+    {
+        "id": "4e274f8f0d57f03f",
+        "type": "mqtt-broker",
+        "name": "hivemq public broker",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "connected",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "disconnecting",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "abruptly disconnected",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "27844f2304b1f311",
+        "type": "ui_group",
+        "name": "Charts",
+        "tab": "2248aa46.11d1c6",
+        "order": 1,
+        "disp": false,
+        "width": 30,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2248aa46.11d1c6",
+        "type": "ui_tab",
+        "name": "System",
+        "icon": "settings",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

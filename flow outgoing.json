@@ -1,0 +1,66 @@
+[
+    {
+        "id": "6d3e34435fcc7065",
+        "type": "ui_chart",
+        "z": "5e701cf3b3c3c95a",
+        "name": "",
+        "group": "27844f2304b1f311",
+        "order": 6,
+        "width": 10,
+        "height": 8,
+        "label": "Verbruik per uur",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "3",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 760,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "27844f2304b1f311",
+        "type": "ui_group",
+        "name": "Charts",
+        "tab": "2248aa46.11d1c6",
+        "order": 1,
+        "disp": false,
+        "width": 30,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2248aa46.11d1c6",
+        "type": "ui_tab",
+        "name": "System",
+        "icon": "settings",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
